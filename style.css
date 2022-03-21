@@ -1,0 +1,171 @@
+html {
+    box-sizing: border-box;
+  }
+  *, *::before, *::after {
+    box-sizing: inherit;
+  }
+
+  body{
+    padding: 0;
+    margin: 0;
+    background: #EFF3FC;
+    font-family: Lato;
+}
+
+
+:root {
+    --blue: #007bff;
+    --indigo: #6610f2;
+    --purple: #6f42c1;
+    --pink: #e83e8c;
+    --red: #dc3545;
+    --orange: #fd7e14;
+    --yellow: #ffc107;
+    --green: #28a745;
+    --teal: #20c997;
+    --cyan: #17a2b8;
+    --white: #fff;
+    --gray: #6c757d;
+    --gray-dark: #343a40;
+    --primary: #007bff;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --info: #17a2b8;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas,
+      "Liberation Mono", "Courier New", monospace;
+  }
+
+  #app{
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    background: var(--light);
+    margin-bottom: 55px;
+    padding-bottom: 20px;
+    /* margin-top: 50px; */
+    border-radius: 10px;
+    position:relative;
+    /* height: 100vh; */
+    padding: 10px;
+  }
+
+  .top{
+      display: flex;
+      background: #fff;
+      height: 50px;
+      padding: 10px 10px;
+      justify-content: center;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+     align-items: center;
+     position: relative;
+  }
+
+  .avatar{
+      height: 40px;
+      width: 40px;
+      overflow: hidden;
+      border-radius: 50%;
+      position: absolute;
+      top: 10%;
+      right: 2%;
+      border: 2px solid grey;
+  }
+
+  .avatar img{
+      height: 40px;
+      width: 40px;
+  }
+
+  .title img{
+      height: 40px;
+  }
+
+  .title{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  .books{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+  }
+  .book_list_item{
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+   padding: 10px;
+   border-radius: 5px;
+   position: relative;
+   width: 200px;
+  }
+
+  .book_cover img{
+  height: 200px;
+  margin-bottom: 10px;
+  }
+
+  .book_title{
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .book_author{
+      font-size: 16px;
+  }
+
+  .book_price{
+     color: var(--green);
+     font-weight: bold;
+  }
+
+  .opt{
+      display: none;
+  }
+
+  .options{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      background: #343a4096;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      border-radius: 5px;
+  }
+
+  .add_cart, .buy{
+    padding: 10px;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .add_cart{
+      background-color: var(--red);
+      
+  }
+
+  .buy{
+     background-color: var(--green);
+  }
