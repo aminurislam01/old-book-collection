@@ -57,6 +57,8 @@ html {
     position:relative;
     /* height: 100vh; */
     padding: 10px;
+    margin-top: 50px;
+    /* position: relative; */
   }
 
   .top{
@@ -64,11 +66,15 @@ html {
       background: #fff;
       height: 50px;
       padding: 10px 10px;
-      /* justify-content: center; */
       box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
      align-items: center;
-     position: relative;
+     /* position: relative; */
      justify-content: space-between;
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 100%;
+     z-index: 9999999;
   }
 
   .actions{
@@ -146,11 +152,12 @@ html {
    flex-direction: column;
    justify-content: center;
    align-items: center;
-   box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
+   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
    padding: 10px;
    border-radius: 5px;
    position: relative;
    width: 200px;
+   background: #fff;
   }
 
   .book_cover img{
@@ -292,3 +299,101 @@ html {
   .buy-now{
     display: none;
   }
+
+  .order-status{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 16px;
+  }
+  .pending{
+    background-color: #dc3545;
+    padding: 5px;
+    color: #fff;
+    border-radius: 3px;
+  }
+
+  .confirm{
+    background-color: var(--green);
+    padding: 5px;
+    color: #fff;
+    border-radius: 3px;
+  }
+
+  .order-total{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .subtotal{
+    color: crimson;
+    font-weight: bold;
+    font-size: 25px;
+  }
+
+  .search-bar{
+    display: flex;
+     width: 100%;
+     padding: 10px;
+     gap: 10px;
+     align-items: center;
+ }
+ .search-icon img{
+     height: 30px;
+ }
+ 
+ .search-bar input{
+     height: 40px;
+     width: 100%;
+     border: none;
+     background: rgb(241, 239, 239);
+ }
+
+ .floating_button{
+  position: fixed;
+  bottom: 10%;
+  right: 10%;
+  z-index: 9999;
+  height: 50px;
+  width: 50px;
+  background: #343a40;
+  border-radius: 50%;
+  padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+ }
+
+ .floating_button img{
+   height: 30px;
+ }
+
+ .profile{
+   display: flex;
+   justify-content: center;
+   flex-direction: column;
+   align-items: center;
+   background: #fff;
+   padding: 20px;
+   border-radius: 10px;
+ }
+
+ .avatar_big{
+    overflow: hidden;
+    border-radius: 50%;
+    margin-bottom: 10px;
+ }
+
+ .user_name{
+   font-size: 24px;
+   font-weight: bold;
+ }
+
+ .logout{
+   margin-top: 50px;
+ }
+
+ .order-head{
+   padding: 10px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+ }

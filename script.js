@@ -5,9 +5,9 @@ var app = document.getElementById('app');
 
       // router.navigate('/');
 $('.user_avatar').html(`
-<div class="avatar">
+<a href="#!/profile"><div class="avatar">
 <img src="${user.photoURL}">
-</div>
+</div></a>
 `)
 
 //getting cart
@@ -29,6 +29,12 @@ db.collection('users').doc(user.uid).collection('cart').onSnapshot(snap=>{
 router.on({
     "/": function(){
         app.innerHTML = `
+        <a href="#!/add_book"><div class="floating_button"><img src="./images/plus.png"></div></a>
+        <div class="search-bar">
+    <div class="search-icon"><img src="../images/search.png"></div>
+    <input autocomplete="off" id="search-book" placeholder="Search Book..." type="text" name="search"/>
+    </div>
+
         <div class="books">
         <div class="preloader-wrapper big active">
         <div class="spinner-layer spinner-blue-only">
@@ -62,18 +68,40 @@ router.on({
             books.innerHTML = '';
             for(let i=0; i<booksArr.length; i++){
               books.innerHTML += `
+              <div class="b">
               <div class="book_list_item">
+              
               <div class="opt">
               <div class="options">
              <div id="${i}" class="add_cart">Add to Cart</div> 
               </div></div>
+
               <div class="book_cover"><img src="${booksArr[i].cover}"></div>
               <div class="book_title">${booksArr[i].title}</div>
               <div class="book_author">${booksArr[i].author}</div>
               <div class="book_price">${booksArr[i].price} tk</div>
               </div>
+              </div>
               `
             }
+
+            //searching...
+            document.getElementById('search-book').addEventListener('keyup', e=>{
+              if(e.key = 'Enter'){
+                e.preventDefault();
+                let filter = ($('#search-book')[0].value).toUpperCase();
+                let allPost = document.querySelectorAll('.book_title');
+                for(let i=0; i<allPost.length; i++){
+                  tag = allPost[i].innerText.toUpperCase();
+                  if(tag.indexOf(filter) > -1) {
+                    allPost[i].parentNode.parentNode.style.display = "block";
+                  } else{
+                    allPost[i].parentNode.parentNode.style.display = "none";
+                  }
+    
+                }
+              }
+            });
 
             $('.book_list_item').hover(function(){
                 $($(this)[0].children[0]).show();
@@ -93,10 +121,6 @@ router.on({
           })
     }, 
 
-    "/book_details/:id": function(params){
-         
-    },
-
     "/cart": function(){
         app.innerHTML = `
         <div class="cart-bar">
@@ -106,16 +130,24 @@ router.on({
          <div class="carts"></div>
 
          <center><button class="btn green buy-now">Buy Selected Books(<span id="sl-count"></span>)</button></center>
+
+
+         <h5 class="order-head">Your Orders</h5>
+         <div class="myOrder">
+         <div class="order-status"></div>
+         <div class="orders"></div>
+         <div class="order-total"></div>
+         </div>
         `
 
         const carts = document.querySelector('.carts');
-       
         db.collection('users').doc(user.uid).collection('cart').onSnapshot(snap=>{
-
           let amount = 0;
           carts.innerHTML = '';
           let myCart = [];
-          $('.buy-now').hide();
+          $('.buy-now').hide();            
+            
+          let selectedBooks = [];
          
           snap.forEach(item=>{
                myCart.push({
@@ -148,7 +180,15 @@ router.on({
             <div class="list-author">${myCart[i].author}</div>
             <div class="list-price">${myCart[i].price} tk</div>
             </div>
-            `
+            ` 
+            selectedBooks.push({
+              cover: myCart[i].cover,
+              title:  myCart[i].title,
+              author: myCart[i].author,
+              price: myCart[i].price
+            })
+
+
              }else{
                carts.innerHTML += `
                <div id="${myCart[i].id}|${myCart[i].price}|${i}" class="list-item">
@@ -165,7 +205,10 @@ router.on({
           }
 
           if(myCart.length === 0){
-            carts.innerHTML = `<h3>No items in your cart...</h3>`
+            carts.innerHTML = `<center>
+            <img src="./images/empty_cart.png" height="100px">       
+            <h6>No items in your cart...</h6>
+            </center>`
           }
 
           $('.total').html(`${amount} tk`);
@@ -176,17 +219,90 @@ router.on({
             let itemId = id[0];
             let price = parseInt(id[1]);
             let index = parseInt(id[2]);
-            
-            
             db.collection('users').doc(user.uid).collection('cart').doc(itemId).update({
                isSelected: !myCart[index].isSelected
             });
-            
-            
+          })
+
+          $('.buy-now').click(function(){
+            Swal.fire({
+              title: 'Your bKash Transaction ID',
+              input: 'text',
+              inputAttributes: {
+                autocapitalize: 'off'
+              },
+              showCancelButton: true,
+              confirmButtonText: 'Confirm',
+              showLoaderOnConfirm: true,
+              preConfirm: (login) => {}
+            }).then((result) => {
+              
+              if (result.isConfirmed) {
+                if((result.value).trim() == ""){
+                  Swal.fire(
+                    'Field Empty!',
+                    'Please provide TransX ID!',
+                    'error'
+                  )
+                }else{
+                db.collection('sells').doc(user.uid).set({
+                  uid: user.uid,
+                  user: user.displayName,
+                  books: selectedBooks,
+                  transX: result.value,
+                  isConfirmed: false,
+                  amount: amount
+                }).then(()=>{
+                  Swal.fire({
+                    title: 'Order placed!',
+                    html: 'We will send you an email.',
+                    icon: 'success',
+                  });
+
+                  window.location.reload();
+                  
+                });
+              }
+              }
+            });
           })
 
           $('.delete').click(function(){
             db.collection('users').doc(user.uid).collection('cart').doc($(this)[0].id).delete().then(()=>{console.log('deleted')});
+          });
+
+          db.collection('sells').doc(user.uid).onSnapshot(snap=>{
+             let myorder = snap.data();
+               if(myorder === undefined){
+                 $('.myOrder').html(
+                 `<center>
+            <img src="./images/empty_order.png" height="100px">       
+            <h6>No order...</h6>
+            </center>`
+                 )
+               }else{
+             if(myorder.isConfirmed == false){
+             $('.order-status').html(`Order Status: <div class="pending">Pending</div>`)
+             }else{
+              $('.order-status').html(`Order Status: <div class="confirm">Confirmed</div>`)
+             }
+
+             const orders = document.querySelector('.orders');
+             orders.innerHTML = ``;
+             for(let i=0; i<myorder.books.length; i++){
+              orders.innerHTML += `
+              <div class="list-item">
+              <div class="list-img"><img src="${myorder.books[i].cover}"></div>
+              <div class="list-details">
+              <div class="list-title">${myorder.books[i].title}</div>
+              <div class="list-author">${myorder.books[i].author}</div>
+              <div class="list-price">${myorder.books[i].price} tk</div>
+              </div>
+              `
+             }
+
+             $('.order-total').html(`<div>Subtotal</div><div class="subtotal">= ${myorder.amount} tk</div>`)
+            }
           });
 
 
@@ -196,18 +312,33 @@ router.on({
 
        
     },
+    "/admin": function(){
+      app.innerHTML = `
+      <div class="order-list"></div>
 
-    "/buy": function(){
-        app.innerHTML = `
-        <h1>Buy</h1>
-        
-        `
+
+      `
+
+      db.collection('selles')
     },
+    "/profile": function(){
+       app.innerHTML = `
+       <div class="profile">
 
-    "/profile/:id": function(){
+       <div class="avatar_big"><img src="${user.photoURL}"></div>
+       <div class="user_name">${user.displayName}</div>
+       <div class="email">${user.email}</div>
 
+       <button class="btn red logout">Logout</div>
+       </div>
+       `
+
+       $('.logout').click(function(){
+        firebase.auth().signOut();
+        router.navigate('/');
+        window.location.reload()
+       })
     },
-
     "/add_book": function(){
         app.innerHTML = `
         <h3>Add Book</h3>

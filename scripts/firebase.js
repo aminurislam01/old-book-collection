@@ -25,8 +25,6 @@
                   name: authResult.user.displayName,
                   email: authResult.user.email,
                   photoURL: authResult.user.photoURL,
-                  cart: null,
-                  buy: null
               })
 
           }
