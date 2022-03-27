@@ -227,6 +227,9 @@ router.on({
           $('.buy-now').click(function(){
             Swal.fire({
               title: 'Your bKash Transaction ID',
+              html: `
+              bKash No. 01571721957
+              `,
               input: 'text',
               inputAttributes: {
                 autocapitalize: 'off'
